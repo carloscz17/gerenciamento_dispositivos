@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status do Dispositivo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Status do Dispositivo: {{ dispositivo.nome }}</h1>
+    <p>Fabricante: {{ dispositivo.fabricante }}</p>
+    <p>Tipo: {{ dispositivo.tipo }}</p>
+    <p>Status: {{ status['status'] }}</p>
+    <h2>Logs</h2>
+    <ul>
+        {% for log in dispositivo.logs %}
+        <li>{{ log }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Voltar para Home</a>
+</body>
+</html>
