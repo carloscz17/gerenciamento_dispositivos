@@ -3,7 +3,7 @@ from utils.monitoramento import obter_dispositivos_conectados, obter_status_disp
 import threading
 import time
 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__)
 
 @app.route('/')
 def index():
@@ -36,4 +36,4 @@ def atualizacao_continua():
 
 if __name__ == '__main__':
     threading.Thread(target=atualizacao_continua, daemon=True).start()
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
