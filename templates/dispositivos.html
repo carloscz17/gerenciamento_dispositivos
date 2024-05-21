@@ -17,7 +17,7 @@
                     let tabela = '<table>';
                     tabela += '<tr><th>Nome</th><th>Tipo</th><th>Frequência</th></tr>';
                     dispositivos.forEach(dispositivo => {
-                        tabela += `<tr><td class="${dispositivo.status && dispositivo.status.toLowerCase() === 'ativo' ? 'ativo' : ''}">${dispositivo.nome}</td><td>${dispositivo.tipo}</td><td>${dispositivo.frequencia}</td></tr>`;
+                        tabela += `<tr><td>${dispositivo.nome}</td><td>${dispositivo.tipo}</td><td>${dispositivo.frequencia}</td></tr>`;
                     });
                     tabela += '</table>';
 
