@@ -39,7 +39,18 @@
             fetch('/api/status')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('conteudo').innerHTML = JSON.stringify(data.status, null, 2);
+                    const status = data.status;
+                    const dispositivosInativos = data.dispositivos_inativos;
+                    const conteudo = document.getElementById('conteudo');
+                    conteudo.innerHTML = '';
+
+                    status.forEach(dispositivo => {
+                        conteudo.innerHTML += `<p>Dispositivo Ativo: ${dispositivo.nome}, Tipo: ${dispositivo.tipo}, Frequência: ${dispositivo.frequencia}, Status: ${dispositivo.status}</p>`;
+                    });
+
+                    dispositivosInativos.forEach(dispositivo => {
+                        conteudo.innerHTML += `<p>Dispositivo Inativo: ${dispositivo.nome}, Tipo: ${dispositivo.tipo}, Frequência: ${dispositivo.frequencia}, Status: ${dispositivo.status}</p>`;
+                    });
                 });
         }
 
@@ -48,7 +59,7 @@
 </head>
 <body>
     <h1>Status dos Dispositivos</h1>
-    <pre id="conteudo"></pre>
+    <div id="conteudo"></div>
     <button onclick="window.location.href='/'">Voltar</button>
 </body>
 </html>

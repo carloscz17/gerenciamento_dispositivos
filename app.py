@@ -1,6 +1,5 @@
 from flask import Flask, render_template, jsonify
 from utils.monitoramento import obter_dispositivos_conectados, obter_status_dispositivos, dispositivos_inativos
-from utils.alertas import verificar_alertas
 import threading
 import time
 
@@ -18,10 +17,6 @@ def dispositivos():
 def status():
     return render_template('status.html')
 
-@app.route('/alertas')
-def alertas():
-    return render_template('alertas.html')
-
 @app.route('/api/dispositivos')
 def api_dispositivos():
     dispositivos = obter_dispositivos_conectados()
@@ -31,15 +26,8 @@ def api_dispositivos():
 def api_status():
     dispositivos = obter_dispositivos_conectados()
     status = obter_status_dispositivos(dispositivos)
-    return jsonify({'status': status})
-
-@app.route('/api/alertas')
-def api_alertas():
-    dispositivos = obter_dispositivos_conectados()
-    status = obter_status_dispositivos(dispositivos)
-    alertas = verificar_alertas(status)
     dispositivos_inativos_lista = list(dispositivos_inativos.values())
-    return jsonify({'alertas': alertas, 'dispositivos_inativos': dispositivos_inativos_lista})
+    return jsonify({'status': status, 'dispositivos_inativos': dispositivos_inativos_lista})
 
 def atualizacao_continua():
     while True:
