@@ -1,24 +1,51 @@
-from flask import Flask, render_template, request, redirect, url_for
-from utils.monitoramento import obter_dispositivos_conectados, obter_status_dispositivos
+from flask import Flask, render_template, jsonify
+from utils.monitoramento import obter_dispositivos_conectados, obter_status_dispositivos, dispositivos_inativos
 from utils.alertas import verificar_alertas
+import threading
+import time
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/dispositivos')
+def dispositivos():
+    return render_template('dispositivos.html')
+
+@app.route('/status')
+def status():
+    return render_template('status.html')
+
+@app.route('/alertas')
+def alertas():
+    return render_template('alertas.html')
+
+@app.route('/api/dispositivos')
+def api_dispositivos():
+    dispositivos = obter_dispositivos_conectados()
+    return jsonify({'dispositivos': dispositivos})
+
+@app.route('/api/status')
+def api_status():
+    dispositivos = obter_dispositivos_conectados()
+    status = obter_status_dispositivos(dispositivos)
+    return jsonify({'status': status})
+
+@app.route('/api/alertas')
+def api_alertas():
     dispositivos = obter_dispositivos_conectados()
     status = obter_status_dispositivos(dispositivos)
     alertas = verificar_alertas(status)
-    return render_template('index.html', dispositivos=dispositivos, status=status, alertas=alertas)
+    dispositivos_inativos_lista = list(dispositivos_inativos.values())
+    return jsonify({'alertas': alertas, 'dispositivos_inativos': dispositivos_inativos_lista})
 
-@app.route('/status/<nome_dispositivo>')
-def status_dispositivo(nome_dispositivo):
-    dispositivos = obter_dispositivos_conectados()
-    dispositivo = next((d for d in dispositivos if d['nome'] == nome_dispositivo), None)
-    if dispositivo:
-        status = obter_status_dispositivos([dispositivo])[0]
-        return render_template('status_dispositivo.html', dispositivo=dispositivo, status=status)
-    return redirect(url_for('index'))
+def atualizacao_continua():
+    while True:
+        obter_dispositivos_conectados()
+        time.sleep(10)
 
 if __name__ == '__main__':
+    threading.Thread(target=atualizacao_continua, daemon=True).start()
     app.run(debug=True)

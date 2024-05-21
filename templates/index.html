@@ -1,26 +1,41 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoramento de Dispositivos</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Gerência de Dispositivos de E/S</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Monitoramento de Dispositivos</h1>
-    <ul>
-        {% for dispositivo in dispositivos %}
-        <li>
-            <a href="{{ url_for('status_dispositivo', nome_dispositivo=dispositivo.nome) }}">{{ dispositivo.nome }}</a>
-            - {{ dispositivo.fabricante }} - {{ dispositivo.tipo }} - Status: {{ dispositivo.status }}
-        </li>
-        {% endfor %}
-    </ul>
-    <h2>Alertas</h2>
-    <ul>
-        {% for alerta in alertas %}
-        <li>{{ alerta }}</li>
-        {% endfor %}
-    </ul>
+    <h1>Gerência de Dispositivos de E/S</h1>
+    <div class="button-container">
+        <button onclick="window.location.href='/dispositivos'">Dispositivos Conectados</button>
+        <button onclick="window.location.href='/status'">Status dos Dispositivos</button>
+        <button onclick="window.location.href='/alertas'">Alertas</button>
+    </div>
 </body>
 </html>
