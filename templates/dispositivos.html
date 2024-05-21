@@ -4,46 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dispositivos Conectados</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        h1 {
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        pre {
-            width: 80%;
-            max-width: 600px;
-            overflow: auto;
-            background: #f0f0f0;
-            padding: 10px;
-            margin-top: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/style.css">
     <script>
         function carregarDados() {
             fetch('/api/dispositivos')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('conteudo').innerHTML = JSON.stringify(data.dispositivos.map(d => ({
-                        nome: d.nome,
-                        tipo: d.tipo,
-                        frequencia: d.frequencia
-                    })), null, 2);
+                    const dispositivos = data.dispositivos;
+                    const conteudo = document.getElementById('conteudo');
+                    conteudo.innerHTML = '';
+
+                    let tabela = '<table>';
+                    tabela += '<tr><th>Nome</th><th>Tipo</th><th>Frequência</th></tr>';
+                    dispositivos.forEach(dispositivo => {
+                        tabela += `<tr><td class="${dispositivo.status && dispositivo.status.toLowerCase() === 'ativo' ? 'ativo' : ''}">${dispositivo.nome}</td><td>${dispositivo.tipo}</td><td>${dispositivo.frequencia}</td></tr>`;
+                    });
+                    tabela += '</table>';
+
+                    conteudo.innerHTML = tabela;
                 });
         }
 
@@ -52,7 +30,7 @@
 </head>
 <body>
     <h1>Dispositivos Conectados</h1>
-    <pre id="conteudo"></pre>
+    <div id="conteudo"></div>
     <button onclick="window.location.href='/'">Voltar</button>
 </body>
 </html>
