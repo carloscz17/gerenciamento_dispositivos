@@ -6,8 +6,6 @@ dispositivos_inativos = {}
 
 def obter_dispositivos_conectados():
     dispositivos = []
-
-    # Obter informações do sistema operacional
     sistema_operacional = platform.system()
 
     if sistema_operacional == 'Linux':
@@ -42,7 +40,6 @@ def obter_dispositivos_windows():
     import wmi
     dispositivos = []
     try:
-        # Inicializar a COM library
         pythoncom.CoInitialize()
         c = wmi.WMI()
         for usb in c.Win32_PnPEntity():
@@ -74,7 +71,6 @@ def obter_status_dispositivos(dispositivos):
     dispositivos_atuais = {d['nome']: d for d in dispositivos}
     novos_dispositivos_logs = dispositivos_logs.copy()
 
-    # Marcar dispositivos desconectados como inativos
     for nome, dispositivo in dispositivos_anteriores.items():
         if nome not in dispositivos_atuais:
             dispositivo['status'] = 'inativo'
@@ -82,7 +78,6 @@ def obter_status_dispositivos(dispositivos):
             dispositivos_inativos[nome] = dispositivo
             novos_dispositivos_logs[nome] = dispositivo['logs']
 
-    # Atualizar logs de dispositivos conectados
     for dispositivo in dispositivos:
         if dispositivo['status'] == 'ativo':
             if dispositivo['nome'] in novos_dispositivos_logs:
@@ -98,7 +93,6 @@ def obter_status_dispositivos(dispositivos):
     return dispositivos
 
 def obter_frequencia_dispositivo(tipo_usb):
-    # Definir frequências padrão para diferentes tipos de USB
     frequencias = {
         'usb2': '480 Mbps',
         'usb3': '5 Gbps',
@@ -108,7 +102,6 @@ def obter_frequencia_dispositivo(tipo_usb):
     return frequencias.get(tipo_usb.lower(), 'Desconhecida')
 
 def determinar_tipo_usb_windows(usb):
-    # Implementação simplificada para determinar o tipo de USB no Windows
     if '3.0' in usb.Name:
         return 'usb3'
     elif '3.1' in usb.Name:
